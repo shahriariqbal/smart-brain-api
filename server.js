@@ -2,18 +2,26 @@ const express = require ('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
 
 
+const postgres = knex({
+  client: 'pg',
+  connection: {
+    host : '127.0.0.1',
+    user : 'postgres',
+    password : '1234',
+    database : 'smartbrain'
+  }
+});
+
+console.log(  postgres.select('*').from('users'));
 
 const app = express();
-app.use(bodyParser.json());
-app.use(cors())
 
 const database= {
 	users:[
-
-
-	{
+    {
 		id: '123',
 		name: 'John',
 		email: 'john@gmail.com',
@@ -31,44 +39,38 @@ const database= {
 		joined: new Date()
 	}
 
+    ]
 
-
-		
-
-
-
-	],
-	login:[
-      {
-      	id:'987',
-      	hash: '',
-      	email: 'john@gmail.com'
-      }
-	]
 }
+
+
+app.use(cors())
+app.use(bodyParser.json());
+
 
 app.get('/', (req,res)=>{
 	res.send(database.users);
 })
 
+
+
 app.post('/signin', (req, res) => {
-
-
-bcrypt.compare("apples", '$2a$10$LBFqGMPQYSbePTsHwyb1L.UPkVaCaU3EeJMobkJHV5S5rpWbX0Ik6', function(err, res) {
-	console.log('first guess', res)
-    
-});
-bcrypt.compare("veggies", '$2a$10$LBFqGMPQYSbePTsHwyb1L.UPkVaCaU3EeJMobkJHV5S5rpWbX0Ik6' , function(err, res) {
-	console.log('second guess', res)
-
-});
-
-
- if (req.body.email === database.users[0].email   &&  req.body.password === database.users[0].password) {
- 	res.json('success');
- }else{
- 	res.status(400).json('error logging in')
+	 if (req.body.email === database.users[0].email   &&  
+ 	     req.body.password === database.users[0].password) {
+ 	     res.json(database.users[0]);
+        }else{
+ 	     res.status(400).json('error logging in');
  }
+
+// bcrypt.compare("apples", '$2a$10$LBFqGMPQYSbePTsHwyb1L.UPkVaCaU3EeJMobkJHV5S5rpWbX0Ik6', function(err, res) {
+// 	console.log('first guess', res)
+    
+// });
+// bcrypt.compare("veggies", '$2a$10$LBFqGMPQYSbePTsHwyb1L.UPkVaCaU3EeJMobkJHV5S5rpWbX0Ik6' , function(err, res) {
+// 	console.log('second guess', res)
+
+// });
+
 })
 
 
