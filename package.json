@@ -1,6 +1,14 @@
 {
   "name": "smart-brain-api",
   "version": "0.1.0",
+
+      "engines": {
+    "node": "13.9.0",
+     "npm": "6.13.7"
+  },
+
+
+
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
